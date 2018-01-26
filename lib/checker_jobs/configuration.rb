@@ -7,14 +7,12 @@ class CheckerJobs::Configuration
   attr_accessor :jobs_processor,
                 :emails_backend,
                 :emails_options,
-                :emails_targets,
                 :emails_formatter_class,
                 :time_between_checks,
                 :repository_url
 
   def self.default
     new.tap do |config|
-      config.emails_targets = {}
       config.emails_options = {}
       config.emails_formatter_class = CheckerJobs::EmailsBackends::DefaultFormatter
       config.time_between_checks = DEFAULT_TIME_BETWEEN_CHECKS

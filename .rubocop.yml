@@ -49,3 +49,7 @@ Style/Documentation:
 Style/BlockComments:
   Exclude:
     - "spec/spec_helper.rb"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*_spec.rb"

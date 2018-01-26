@@ -10,6 +10,6 @@ module CheckerJobs
 
   def self.configure(&block)
     Thread.current[:checker_jobs_configuration] = Configuration.default
-    block.call(configuration)
+    block&.call(configuration)
   end
 end

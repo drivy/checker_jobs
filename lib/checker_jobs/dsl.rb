@@ -16,8 +16,8 @@ module CheckerJobs::DSL
     @options = options_hash
   end
 
-  def notify(target_name)
-    @notification_target = CheckerJobs.configuration.emails_targets.fetch(target_name)
+  def notify(target)
+    @notification_target = target
   end
 
   def interval(duration)
@@ -41,7 +41,9 @@ module CheckerJobs::DSL
   #
 
   def notification_target
-    @notification_target || raise(MissingNotificationTarget, self.class)
+    raise CheckerJobs::MissingNotificationTarget, self.class unless defined?(@notification_target)
+
+    @notification_target
   end
 
   def time_between_checks
@@ -49,7 +51,7 @@ module CheckerJobs::DSL
   end
 
   def option(key, default = nil)
-    @options&.fetch(key, default)
+    @options && @options[key] || default
   end
 
   def checks

@@ -23,7 +23,6 @@ CheckerJobs.configure do |config|
 
   config.emails_backend = :action_mailer
   config.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
-  config.emails_targets = { target_alias: "oss@drivy.com" }
 end
 
 #
@@ -33,7 +32,7 @@ end
 class UserChecker < CheckerJobs::Base
   options sidekiq: { queue: :fast }
 
-  notify :target_alias
+  notify "tech@drivy.com"
 
   ensure_no :inconsistent_payment do
     UserRepository.missing_email.size

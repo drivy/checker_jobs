@@ -2,6 +2,9 @@ module CheckerJobs
   class Error < StandardError
   end
 
+  class MissingNotificationTarget < Error
+  end
+
   class Unconfigured < Error
     def message
       "CheckerJobs: are unconfigured, do CheckerJobs.configure before using it."
