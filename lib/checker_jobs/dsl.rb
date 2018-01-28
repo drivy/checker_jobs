@@ -61,7 +61,7 @@ module CheckerJobs::DSL
   def add_check(klass, name, options, block)
     name = name.to_s
 
-    raise(DuplicateCheckerName, name) if checks.key?(name)
+    raise CheckerJobs::DuplicateCheckerName, name if checks.key?(name)
 
     checks[name] = klass.new(self, name, options, block)
   end

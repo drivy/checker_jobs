@@ -1,8 +1,11 @@
 RSpec.describe CheckerJobs::DSL do
   let(:instance) { Class.new { include CheckerJobs::DSL }.new }
+
   let(:key) { Object.new }
-  let(:default) { Object.new }
+  let(:block) { Proc.new {} }
   let(:target) { Object.new }
+  let(:default) { Object.new }
+  let(:options) { Object.new }
   let(:duration) { Object.new }
 
   #
@@ -84,5 +87,51 @@ RSpec.describe CheckerJobs::DSL do
       set_time_between_checks
       expect(instance.time_between_checks).to be duration
     end
+  end
+
+  shared_examples "ensure method" do
+    subject(:ensure_method_name) do
+      instance.__send__(method_name, :name, options, &block)
+    end
+
+    it "adds check_class into checks['name']" do
+      ensure_method_name
+      expect(instance.checks["name"]).to be_a check_class
+    end
+
+    it "sets attributes of the check's instance" do
+      ensure_method_name
+      expect(instance.checks["name"]).to have_attributes(klass: instance.class,
+                                                         name: "name",
+                                                         options: options,
+                                                         block: block)
+    end
+
+    context "when name is already used" do
+      before { instance.ensure_no(:name, options, &block) }
+
+      it { expect { ensure_method_name }.to raise_error(CheckerJobs::DuplicateCheckerName) }
+    end
+  end
+
+  describe "#ensure_no" do
+    let(:method_name) { "ensure_no" }
+    let(:check_class) { CheckerJobs::Checks::EnsureNo }
+
+    include_examples "ensure method"
+  end
+
+  describe "#ensure_more" do
+    let(:method_name) { "ensure_more" }
+    let(:check_class) { CheckerJobs::Checks::EnsureMore }
+
+    include_examples "ensure method"
+  end
+
+  describe "#ensure_fewer" do
+    let(:method_name) { "ensure_fewer" }
+    let(:check_class) { CheckerJobs::Checks::EnsureFewer }
+
+    include_examples "ensure method"
   end
 end

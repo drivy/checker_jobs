@@ -53,3 +53,6 @@ Style/BlockComments:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*_spec.rb"
+
+Style/Proc:
+  Enabled: false
