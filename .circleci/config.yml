@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      - checkout
+
+      # Bundle install with cache
+      - restore_cache:
+          key: checker_jobs-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Install Ruby dependencies
+          command: bundle install --path vendor/bundle --jobs=`nproc`
+      - save_cache:
+          key: checker_jobs-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: RSpec
+          command: bundle exec rspec --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+
