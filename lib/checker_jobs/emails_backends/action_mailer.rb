@@ -1,3 +1,5 @@
+require "action_mailer"
+
 class CheckerJobs::EmailsBackends::ActionMailer
   def initialize(check, count, entries)
     @check = check

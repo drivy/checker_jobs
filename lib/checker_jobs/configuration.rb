@@ -24,7 +24,7 @@ class CheckerJobs::Configuration
     when :sidekiq
       CheckerJobs::JobsProcessors::Sidekiq
     else
-      raise UnsupportedConfigurationOption.new(:jobs_processor, jobs_processor)
+      raise CheckerJobs::UnsupportedConfigurationOption.new(:jobs_processor, jobs_processor)
     end
   end
 
@@ -33,7 +33,7 @@ class CheckerJobs::Configuration
     when :action_mailer
       CheckerJobs::EmailsBackends::ActionMailer
     else
-      raise UnsupportedConfigurationOption.new(:emails_backend, emails_backend)
+      raise CheckerJobs::UnsupportedConfigurationOption.new(:emails_backend, emails_backend)
     end
   end
 end

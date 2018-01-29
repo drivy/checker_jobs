@@ -15,7 +15,7 @@ module CheckerJobs
     def initialize(option_name, value)
       @option_name = option_name
       @value = value
-      super
+      super()
     end
 
     def message

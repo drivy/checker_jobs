@@ -1,7 +1,7 @@
+require "sidekiq"
+
 module CheckerJobs::JobsProcessors::Sidekiq
   def self.included(base)
-    defined?(Sidekiq::Worker) || raise(MissingDependency, "Sidekiq::Worker")
-
     base.include(Sidekiq::Worker)
     base.extend(ClassMethods)
   end
