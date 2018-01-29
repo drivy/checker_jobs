@@ -6,18 +6,22 @@ jobs:
     steps:
       - checkout
 
-      # Bundle install with cache
+      - run:
+          name: "Creating a Gemfile.lock without bundler's version"
+          command: "head -n -3 Gemfile.lock > Gemfile.lock.no-version"
+
+      # Bundle install with cache, Ignore bundler version
       - restore_cache:
-          key: checker_jobs-{{ checksum "Gemfile.lock" }}
+          key: checker_jobs-{{ checksum "Gemfile.lock.no-version"}}
       - run:
           name: Install Ruby dependencies
           command: bundle install --path vendor/bundle --jobs=`nproc`
       - save_cache:
-          key: checker_jobs-{{ checksum "Gemfile.lock" }}
+          key: checker_jobs-{{ checksum "Gemfile.lock.no-version"}}
           paths:
             - vendor/bundle
 
       - run:
           name: RSpec
-          command: bundle exec rspec --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+          command: bundle exec rspec --format documentation
 
