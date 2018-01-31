@@ -4,7 +4,7 @@ require "checker_jobs/configuration"
 require "checker_jobs/base"
 
 module CheckerJobs
-  def self.configuration 
+  def self.configuration
     Thread.current[:checker_jobs_configuration] || raise(Unconfigured)
   end
 
