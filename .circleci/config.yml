@@ -2,13 +2,19 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/ruby:2.4.3
     steps:
       - checkout
+
+      - run: git fetch origin --depth=1000
 
       - run:
           name: "Creating a Gemfile.lock without bundler's version"
           command: "head -n -3 Gemfile.lock > Gemfile.lock.no-version"
+
+      - run:
+          name: Install dependencies
+          command: sudo apt-get install -y cmake
 
       # Bundle install with cache, Ignore bundler version
       - restore_cache:
@@ -25,3 +31,6 @@ jobs:
           name: RSpec
           command: bundle exec rspec --format documentation
 
+      - run:
+          name: Pronto
+          command: bin/pronto-ci
