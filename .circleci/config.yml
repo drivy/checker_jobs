@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.4.3
+      - image: drivy/rails-ci:0.1.2
     steps:
       - checkout
 
@@ -11,10 +11,6 @@ jobs:
       - run:
           name: "Creating a Gemfile.lock without bundler's version"
           command: "head -n -3 Gemfile.lock > Gemfile.lock.no-version"
-
-      - run:
-          name: Install dependencies
-          command: sudo apt-get install -y cmake
 
       # Bundle install with cache, Ignore bundler version
       - restore_cache:
