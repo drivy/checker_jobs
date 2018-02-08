@@ -1,8 +1,6 @@
 # CheckerJobs
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/checker_jobs`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gems provides a small DSL to check your data for inconsistencies.
 
 ## Installation
 
@@ -12,30 +10,86 @@ Add this line to your application's Gemfile:
 gem 'checker_jobs'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install checker_jobs
-
 ## Usage
 
+Have a look at the `examples` directory of the repository to get a clearer idea
+about how to use and the gem is offering.
 
+### Configure
 
-## Development
+At the moment this gems supports [Drivy][gh-drivy]'s stack which includes
+[Sidekiq][gh-sidekiq] and [Rails][rails]. It has been designed to supports more
+than Sidekiq a job processor and more that ActionMailer as a notification
+gateway. If you're on the same stack as we are, configuration looks like this:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+``` ruby
+require "checker_jobs"
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+CheckerJobs.configure do |config|
+  config.repository_url = { github: "drivy/checker_jobs" }
+
+  config.jobs_processor = :sidekiq
+
+  config.emails_backend = :action_mailer
+  config.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
+end
+
+```
+
+This piece of code usually goes into the `config/initializers/checker_jobs.rb`
+file in a rails application. It relies on the fact that ActionMailer and sidekiq
+are already configured.
+
+If you're on a different stack and you'll like to add a new job processor or
+notification backend in this gem, [drop us a line][d-jobs].
+
+### Write checkers
+
+A checker is a class that inherits `CheckerJobs::Base` and uses the
+[DSL](wiki/DSL) to declare checks.
+
+``` ruby
+class UserChecker < CheckerJobs::Base
+  options sidekiq: { queue: :fast }
+
+  notify "tech@drivy.com"
+
+  ensure_no :user_without_email do
+    UserRepository.missing_email.size
+  end
+end
+```
+
+The `UserChecker` will have the same interface as your usual jobs. In this
+example, `UserChecker` will be a `Sidekiq::Worker`. Its `#perform` method will
+run the check named `:user_without_email` and if
+`UserRepository.missing_email.size` is greater than 0 then an email will be
+fired through ActionMailer to `tech@drivy.com`.
+
+### Schedule checks
+
+Once you have checker jobs, you'll need to run them. There is many task
+scheduler out there and it isn't really relevant what you'll be using.
+
+You have to enqueue you job as often as you like and that's it.
+
+``` ruby
+UserChecker.perform_async
+```
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/drivy/checker_jobs.
 
+You'll find out that the CI is setup to run test coverage and linting.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT License][licence].
 
+
+[d-jobs]:     https://www.drivy.com/jobs
+[gh-drivy]:   https://github.com/drivy
+[gh-sidekiq]: https://github.com/mperham/sidekiq
+[licence]:    http://opensource.org/licenses/MIT
+[rails]:      http://rubyonrails.org
