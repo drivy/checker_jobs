@@ -1,3 +1,6 @@
+require "simplecov"
+SimpleCov.start
+
 require "action_mailer"
 require "checker_jobs"
 require "pry-byebug"
