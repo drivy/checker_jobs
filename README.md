@@ -2,6 +2,9 @@
 
 This gems provides a small DSL to check your data for inconsistencies.
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/maintainability)](https://codeclimate.com/github/drivy/checker_jobs/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/test_coverage)](https://codeclimate.com/github/drivy/checker_jobs/test_coverage)
+
 ## Installation
 
 Add this line to your application's Gemfile:
