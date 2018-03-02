@@ -4,7 +4,12 @@ RSpec.describe CheckerJobs::Checks::EnsureFewer, :email, :configuration do
   include EmailHelpers
 
   let(:instance) { described_class.new(checker_klass, "ensure_name", { than: 3 }, block) }
-  let(:checker_klass) { Class.new(CheckerJobs::Base) { notify "oss@drivy.com" } }
+  let(:checker_klass) do
+    Class.new do
+      include CheckerJobs::Base
+      notify "oss@drivy.com"
+    end
+  end
 
   describe "#perform" do
     subject(:perform) { instance.perform }

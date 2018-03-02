@@ -35,7 +35,9 @@ end
 # Checker
 #
 
-class UserChecker < CheckerJobs::Base
+class UserChecker
+  include CheckerJobs::Base
+
   options sidekiq: { queue: :fast }
 
   notify "tech@drivy.com"

@@ -1,7 +1,13 @@
 RSpec.describe CheckerJobs::Checks::Base, :configuration do
   let(:instance) { subclass.new(checker_klass, "ensure_name", {}, block) }
   let(:subclass) { CheckerJobs::Checks::EnsureNo }
-  let(:checker_klass) { Class.new(CheckerJobs::Base) { notify "oss@drivy.com" } }
+  let(:checker_klass) do
+    Class.new do
+      include CheckerJobs::Base
+      notify "oss@drivy.com"
+    end
+  end
+
 
   describe "#perform" do
     subject(:perform) { instance.perform }

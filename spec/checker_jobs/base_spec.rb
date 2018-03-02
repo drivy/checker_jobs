@@ -1,8 +1,8 @@
 RSpec.describe CheckerJobs::Base, :configuration do
   let(:jobs_processor_module) { CheckerJobs.configuration.jobs_processor_module }
 
-  describe "when CheckerJobs::Base is inherited" do
-    let(:klass) { Class.new(described_class) }
+  describe "when CheckerJobs::Base is included" do
+    let(:klass) { Class.new { include CheckerJobs::Base } }
 
     it "extends klass with CheckerJobs::DSL" do
       expect(klass).to be_a CheckerJobs::DSL
