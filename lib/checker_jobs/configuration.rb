@@ -9,13 +9,15 @@ class CheckerJobs::Configuration
                 :emails_options,
                 :emails_formatter_class,
                 :time_between_checks,
-                :repository_url
+                :repository_url,
+                :around_check
 
   def self.default
     new.tap do |config|
       config.emails_options = {}
       config.emails_formatter_class = CheckerJobs::EmailsBackends::DefaultFormatter
       config.time_between_checks = DEFAULT_TIME_BETWEEN_CHECKS
+      config.around_check = ->(check) { check.perform }
     end
   end
 

@@ -65,4 +65,9 @@ module CheckerJobs::DSL
 
     checks[name] = klass.new(self, name, options, block)
   end
+
+  def perform_check(check_name)
+    check = checks.fetch(check_name.to_s)
+    CheckerJobs.configuration.around_check.call(check)
+  end
 end

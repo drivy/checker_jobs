@@ -30,6 +30,17 @@ RSpec.describe CheckerJobs::Configuration do
 
       it { is_expected.to eq described_class::DEFAULT_TIME_BETWEEN_CHECKS }
     end
+
+    describe "the default around_check value" do
+      subject(:around_check) { default.around_check }
+
+      let(:check) { instance_spy(CheckerJobs::Checks::Base) }
+
+      it "calls #perform on its argument when called" do
+        around_check.call(check)
+        expect(check).to have_received(:perform)
+      end
+    end
   end
 
   describe "#jobs_processor_module" do

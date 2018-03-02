@@ -8,7 +8,7 @@ module CheckerJobs::JobsProcessors::Sidekiq
 
   def perform(check_name = nil)
     # Run on specific check
-    return self.class.checks.fetch(check_name.to_s).perform if check_name
+    return self.class.perform_check(check_name.to_s) if check_name
 
     # Enqueue one specific check for each declared check
     self.class.checks.values.each.with_index do |check, index|
