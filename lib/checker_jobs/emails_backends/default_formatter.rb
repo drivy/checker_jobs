@@ -6,7 +6,7 @@ class CheckerJobs::EmailsBackends::DefaultFormatter
   end
 
   def subject
-    name = @check.name.split("_").map(&:capitalize).join(" ")
+    name = @check.name.tr("_", " ").capitalize
     "#{name} checker found #{@count} element(s)"
   end
 
