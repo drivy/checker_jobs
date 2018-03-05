@@ -71,8 +71,8 @@ fired through ActionMailer to `tech@drivy.com`.
 
 ### Schedule checks
 
-Once you have checker jobs, you'll need to run them. There is many task
-scheduler out there and it isn't really relevant what you'll be using.
+Once you have checker jobs, you'll need to run them. There are many task
+schedulers out there and it isn't really relevant what you'll be using.
 
 You have to enqueue you job as often as you like and that's it.
 
