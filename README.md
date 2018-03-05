@@ -74,26 +74,29 @@ gem 'checker_jobs'
 
 ## Usage
 
-Have a look at the `examples` directory of the repository to get a clearer idea
-about how to use and the gem is offering.
+Have a look at the examples directory of the repository to get a clearer idea about how to use and the gem is offering.
 
 ### Configure
-
-At the moment this gems supports [Drivy][gh-drivy]'s stack which includes
-[Sidekiq][gh-sidekiq] and [Rails][rails]. It has been designed to supports more
-than Sidekiq a job processor and more that ActionMailer as a notification
-gateway. If you're on the same stack as we are, configuration looks like this:
 
 ``` ruby
 require "checker_jobs"
 
-CheckerJobs.configure do |config|
-  config.repository_url = { github: "drivy/checker_jobs" }
+CheckerJobs.configure do |c|
+  c.jobs_processor = :sidekiq
 
-  config.jobs_processor = :sidekiq
+  c.notifier :email do |options|
+    options[:email_options] = {
+      from: "oss@drivy.com", reply_to: "no-reply@drivy.com"
+    }
+    options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+  end
 
-  config.emails_backend = :action_mailer
-  config.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
+  c.notifier :logger do |options|
+    options[:logdev] = STDOUT
+    options[:level] = Logger::INFO
+  end
+
+  c.repository_url = { github: "drivy/checker_jobs" }
 end
 
 ```
@@ -104,6 +107,21 @@ are already configured.
 
 If you're on a different stack and you'll like to add a new job processor or
 notification backend in this gem, [drop us a line][d-jobs].
+
+### Job Processor
+
+At the moment, only [Sidekiq][gh-sidekiq] is supported as a job processor to asynchronously check for data inconsitencies.
+The gem is designed to supports more processor.
+PRs are appreciated 🙏
+
+### Notifiers
+
+We support different kind of notifiers, as of today we have the following:
+
+- `:email`: uses `ActionMailer` to send emails. You can pass it any `ActionMailer` options.
+- `:logger`: Uses `Logger` to output inconsitencies in the log. Takes the following params:
+  - `logdev`: The log device. This is a filename (String) or IO object (typically STDOUT, STDERR, or an open file).
+  - `level`: Logging severity threshold (e.g. Logger::INFO)
 
 ### Write checkers
 
@@ -150,10 +168,3 @@ You'll find out that the CI is setup to run test coverage and linting.
 ## License
 
 The gem is available as open source under the terms of the [MIT License][licence].
-
-
-[d-jobs]:     https://www.drivy.com/jobs
-[gh-drivy]:   https://github.com/drivy
-[gh-sidekiq]: https://github.com/mperham/sidekiq
-[licence]:    http://opensource.org/licenses/MIT
-[rails]:      http://rubyonrails.org

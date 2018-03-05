@@ -7,7 +7,7 @@ RSpec.describe CheckerJobs::Checks::EnsureMore, :email, :configuration do
   let(:checker_klass) do
     Class.new do
       include CheckerJobs::Base
-      notify "oss@drivy.com"
+      notify :email, to: "oss@drivy.com"
     end
   end
 

@@ -2,7 +2,10 @@ module CheckerJobs
   class Error < StandardError
   end
 
-  class MissingNotificationTarget < Error
+  class MissingNotifier < Error
+  end
+
+  class InvalidNotifierOptions < Error
   end
 
   class Unconfigured < Error

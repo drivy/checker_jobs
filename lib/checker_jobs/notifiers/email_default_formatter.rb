@@ -1,4 +1,4 @@
-class CheckerJobs::EmailsBackends::DefaultFormatter
+class CheckerJobs::Notifiers::EmailDefaultFormatter
   def initialize(check, count, entries)
     @check = check
     @count = count

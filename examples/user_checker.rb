@@ -21,8 +21,12 @@ CheckerJobs.configure do |config|
 
   config.jobs_processor = :sidekiq
 
-  config.emails_backend = :action_mailer
-  config.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
+  config.notifier :email do |options|
+    options[:email_options] = {
+      from: "oss@drivy.com", reply_to: "no-reply@drivy.com"
+    }
+    options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+  end
 
   config.around_check = -> {
     puts "Starting check #{check.name}..."
@@ -40,7 +44,7 @@ class UserChecker
 
   options sidekiq: { queue: :fast }
 
-  notify "tech@drivy.com"
+  notify :email, to: "tech@drivy.com"
 
   ensure_no :inconsistent_payment do
     UserRepository.missing_email.size

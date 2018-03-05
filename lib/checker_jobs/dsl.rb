@@ -16,8 +16,9 @@ module CheckerJobs::DSL
     @options = options_hash
   end
 
-  def notify(target)
-    @notification_target = target
+  def notify(notifier, notifier_options = {})
+    @notifier = notifier
+    @notifier_options = notifier_options
   end
 
   def interval(duration)
@@ -40,10 +41,14 @@ module CheckerJobs::DSL
   # Private API
   #
 
-  def notification_target
-    raise CheckerJobs::MissingNotificationTarget, self.class unless defined?(@notification_target)
+  def notifier
+    raise CheckerJobs::MissingNotifier, self.class unless defined?(@notifier)
+    @notifier
+  end
 
-    @notification_target
+  def notifier_options
+    raise CheckerJobs::MissingNotifier, self.class unless defined?(@notifier)
+    @notifier_options
   end
 
   def time_between_checks

@@ -3,10 +3,15 @@ RSpec.describe CheckerJobs::DSL do
 
   let(:key) { Object.new }
   let(:block) { Proc.new {} }
-  let(:target) { Object.new }
+  let(:notifier) { :email }
+  let(:notifier_options) { { to: "tech@drivy.com", from: "checkers@drivy.com" } }
   let(:default) { Object.new }
   let(:options) { Object.new }
   let(:duration) { Object.new }
+
+  before do
+    CheckerJobs.configure {}
+  end
 
   #
   # Private API
@@ -24,19 +29,35 @@ RSpec.describe CheckerJobs::DSL do
     end
   end
 
-  describe "#notification_target" do
-    subject(:get_notification_target) { instance.notification_target }
+  describe "#notifier" do
+    subject(:get_notifier) { instance.notifier }
 
     context "without prior call to #notify" do
       it do
-        expect { get_notification_target }.to raise_error CheckerJobs::MissingNotificationTarget
+        expect { get_notifier }.to raise_error CheckerJobs::MissingNotifier
       end
     end
 
     context "with a prior call to #notify" do
-      before { instance.notify(target) }
+      before { instance.notify(notifier, notifier_options) }
 
-      it { is_expected.to be target }
+      it { is_expected.to be notifier }
+    end
+  end
+
+  describe "#notifier_options" do
+    subject(:get_notifier_options) { instance.notifier_options }
+
+    context "without prior call to #notify" do
+      it do
+        expect { get_notifier_options }.to raise_error CheckerJobs::MissingNotifier
+      end
+    end
+
+    context "with a prior call to #notify" do
+      before { instance.notify(:email, notifier_options) }
+
+      it { is_expected.to be notifier_options }
     end
   end
 
@@ -72,11 +93,11 @@ RSpec.describe CheckerJobs::DSL do
   end
 
   describe "#notify" do
-    subject(:set_notification_target) { instance.notify(target) }
+    subject(:set_notifier_options) { instance.notify(notifier, notifier_options) }
 
-    it "updates #notification_target" do
-      set_notification_target
-      expect(instance.notification_target).to be target
+    it "updates #notification_to" do
+      set_notifier_options
+      expect(instance.notifier_options).to be notifier_options
     end
   end
 
