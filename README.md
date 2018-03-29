@@ -52,7 +52,9 @@ A checker is a class that inherits `CheckerJobs::Base` and uses the
 [DSL](wiki/DSL) to declare checks.
 
 ``` ruby
-class UserChecker < CheckerJobs::Base
+class UserChecker
+  include CheckerJobs::Base
+
   options sidekiq: { queue: :fast }
 
   notify "tech@drivy.com"
