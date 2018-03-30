@@ -4,9 +4,9 @@ class CheckerJobs::Checks::EnsureNo < CheckerJobs::Checks::Base
   def handle_result(result)
     case result
     when Numeric
-      notify(count: result) if result.positive?
+      notify(count: result) unless result.zero?
     when Enumerable
-      notify(count: result.size, entries: result) if result.any?
+      notify(count: result.size, entries: result) unless result.empty?
     else
       raise ArgumentError, "Unsupported result: '#{result.class.name}' for 'ensure_no'"
     end

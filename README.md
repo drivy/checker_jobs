@@ -5,6 +5,64 @@ This gems provides a small DSL to check your data for inconsistencies.
 [![Maintainability](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/maintainability)](https://codeclimate.com/github/drivy/checker_jobs/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/test_coverage)](https://codeclimate.com/github/drivy/checker_jobs/test_coverage)
 
+## Introduction
+
+To ensure database integrity, DBMS provides some tools: foreign keys, triggers,
+strored procedures, ... Those tools aren't the easiests to maintain unless your
+project is based on them. Also, you may want to avoid to duplicate your business
+rules from your application to another language and add operational complexity
+around deployment.
+
+This gem doesn't aim to replace those tools but provides something else that
+could serve a close purpose: _ensure that you work with the data you expect_.
+
+This gem helps you schedule some verifications on your data and get alerts when
+something is unexpected. You declare checks that could contain any business code
+you like and then those checks are run by your application, in background jobs.
+
+A small DSL is provided to helps you express your predicates:
+
+- `ensure_no` will check that the result of a given block is `zero?` or `empty?`
+- `ensure_more` will check that the result of a given block is `>=` than a given number
+- `ensure_fewer` will check that the result of a given block is `<=` than a given number
+
+and an easy way to configure notifications.
+
+For instance, at Drivy we don't expect users to get a negative credit amount. It
+isn't easy to get all the validation right because many rules are in play here.
+Because of those rules the credit isn't just a column in our database yet but
+nees to be computed based on various parameters. What we would like to ensure is
+that _no one ends up with a negative credit_. We could write something like:
+
+``` ruby
+class UsersChecker
+  include Checker::Base
+
+  options sidekiq: { queue: :slow }
+
+  notify "oss@drivy.com"
+
+  ensure_no :negative_rental_credit do
+    # The following code is an over-simplification
+    # Real code is more performance oriented...
+
+    user_ids_with_negative_rental_credit = []
+
+    User.find_each do |user|
+      if user.credit_amount < 0
+        user_ids_with_negative_rental_credit << user.id
+      end
+    end
+
+    user_ids_with_negative_rental_credit
+  end
+end
+```
+
+Then when something's wrong, [you'll get alerted](https://cl.ly/3l2b3T3n0o2a).
+
+You'll find more use cases and tips in the [wiki](https://github.com/drivy/checker_jobs/wiki).
+
 ## Installation
 
 Add this line to your application's Gemfile:
