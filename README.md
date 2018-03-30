@@ -36,7 +36,7 @@ that _no one ends up with a negative credit_. We could write something like:
 
 ``` ruby
 class UsersChecker
-  include Checker::Base
+  include CheckerJobs::Base
 
   options sidekiq: { queue: :slow }
 
