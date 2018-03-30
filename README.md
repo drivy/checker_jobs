@@ -31,7 +31,7 @@ and an easy way to configure notifications.
 For instance, at Drivy we don't expect users to get a negative credit amount. It
 isn't easy to get all the validation right because many rules are in play here.
 Because of those rules the credit isn't just a column in our database yet but
-nees to be computed based on various parameters. What we would like to ensure is
+needs to be computed based on various parameters. What we would like to ensure is
 that _no one ends up with a negative credit_. We could write something like:
 
 ``` ruby
