@@ -5,11 +5,12 @@ require "checker_jobs/base"
 
 module CheckerJobs
   def self.configuration
-    Thread.current[:checker_jobs_configuration] || raise(Unconfigured)
+    @configuration || raise(Unconfigured)
   end
 
   def self.configure(&block)
-    Thread.current[:checker_jobs_configuration] = Configuration.default
-    block&.call(configuration)
+    @configuration = Configuration.default.tap do |config|
+      block&.call(config)
+    end
   end
 end
