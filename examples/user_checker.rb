@@ -24,9 +24,9 @@ CheckerJobs.configure do |config|
   config.emails_backend = :action_mailer
   config.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
 
-  config.around_check = ->(check) {
+  config.around_check = -> {
     puts "Starting check #{check.name}..."
-    check.perform
+    yield
     puts "Done #{check.name}!"
   }
 end

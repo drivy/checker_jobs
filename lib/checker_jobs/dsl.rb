@@ -67,7 +67,6 @@ module CheckerJobs::DSL
   end
 
   def perform_check(check_name)
-    check = checks.fetch(check_name.to_s)
-    CheckerJobs.configuration.around_check.call(check)
+    checks.fetch(check_name.to_s).perform
   end
 end

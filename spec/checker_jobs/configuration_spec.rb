@@ -36,8 +36,8 @@ RSpec.describe CheckerJobs::Configuration do
 
       let(:check) { instance_spy(CheckerJobs::Checks::Base) }
 
-      it "calls #perform on its argument when called" do
-        around_check.call(check)
+      it "calls #call its block argument when called" do
+        around_check.call { check.perform }
         expect(check).to have_received(:perform)
       end
     end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    checker_jobs (0.1.0.pre)
+    checker_jobs (0.1.2.pre)
 
 GEM
   remote: https://rubygems.org/

@@ -17,7 +17,7 @@ class CheckerJobs::Configuration
       config.emails_options = {}
       config.emails_formatter_class = CheckerJobs::EmailsBackends::DefaultFormatter
       config.time_between_checks = DEFAULT_TIME_BETWEEN_CHECKS
-      config.around_check = ->(check) { check.perform }
+      config.around_check = ->(&block) { block.call }
     end
   end
 

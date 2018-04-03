@@ -1,8 +1,10 @@
 CheckerJobs::Checks::Base = Struct.new(:klass, :name, :options, :block) do
   def perform
-    klass.new.instance_exec(&block).tap do |result|
-      handle_result(result)
+    result = CheckerJobs.configuration.around_check.call do
+      klass.new.instance_exec(&block)
     end
+
+    result.tap { |res| handle_result(res) }
   end
 
   private
