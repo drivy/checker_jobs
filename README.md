@@ -2,6 +2,7 @@
 
 This gems provides a small DSL to check your data for inconsistencies.
 
+[![Gem Version](https://badge.fury.io/rb/checker_jobs.svg)](https://badge.fury.io/rb/checker_jobs)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/maintainability)](https://codeclimate.com/github/drivy/checker_jobs/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7972bd0e4dc65329f5c6/test_coverage)](https://codeclimate.com/github/drivy/checker_jobs/test_coverage)
 
