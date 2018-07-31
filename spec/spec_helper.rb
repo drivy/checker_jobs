@@ -28,8 +28,19 @@ RSpec.configure do |config|
   config.before(:context, :configuration) do
     CheckerJobs.configure do |c|
       c.jobs_processor = :sidekiq
-      c.emails_backend = :action_mailer
-      c.emails_options = { from: "oss@drivy.com", reply_to: "no-reply@drivy.com" }
+
+      c.notifier :email do |options|
+        options[:email_options] = {
+          from: "oss@drivy.com", reply_to: "no-reply@drivy.com"
+        }
+        options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+      end
+
+      c.notifier :logger do |options|
+        options[:logdev] = STDOUT
+        options[:level] = Logger::INFO
+      end
+
       c.repository_url = { github: "drivy/checker_jobs" }
     end
   end

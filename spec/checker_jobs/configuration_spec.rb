@@ -13,18 +13,6 @@ RSpec.describe CheckerJobs::Configuration do
       expect(default).not_to be other_default
     end
 
-    describe "the default emails_options value" do
-      subject(:emails_options) { default.emails_options }
-
-      it { is_expected.to eq({}) }
-    end
-
-    describe "the default emails_formatter_class value" do
-      subject(:emails_formatter_class) { default.emails_formatter_class }
-
-      it { is_expected.to eq CheckerJobs::EmailsBackends::DefaultFormatter }
-    end
-
     describe "the default time_between_checks value" do
       subject(:time_between_checks) { default.time_between_checks }
 
@@ -62,22 +50,18 @@ RSpec.describe CheckerJobs::Configuration do
     end
   end
 
-  describe "#emails_backend_class" do
-    subject(:emails_backend_class) { instance.emails_backend_class }
-
-    context "when emails_backend isn't supported (or unset)" do
-      before { instance.emails_backend = :mailer }
-
+  describe "#notifier_class" do
+    context "when notifier isn't supported (or unset)" do
       it do
-        expect { emails_backend_class }.
+        expect { instance.notifier_class(:test) }.
           to raise_error CheckerJobs::UnsupportedConfigurationOption
       end
     end
 
-    context "when emails_backend is set to :action_mailer" do
-      before { instance.emails_backend = :action_mailer }
-
-      it { is_expected.to be CheckerJobs::EmailsBackends::ActionMailer }
+    context "when notifier is set to :email" do
+      it do
+        expect(instance.notifier_class(:email)).to be(CheckerJobs::Notifiers::Email)
+      end
     end
   end
 end

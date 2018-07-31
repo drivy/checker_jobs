@@ -10,9 +10,8 @@ CheckerJobs::Checks::Base = Struct.new(:klass, :name, :options, :block) do
   private
 
   def notify(count:, entries: nil)
-    CheckerJobs.configuration.emails_backend_class.
-      new(self, count, entries).
-      notify
+    notifier_class = CheckerJobs.configuration.notifier_class(klass.notifier)
+    notifier_class.new(self, count, entries).notify
   end
 
   def handle_result(_result)

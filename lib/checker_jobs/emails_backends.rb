@@ -1,4 +1,5 @@
-module CheckerJobs::EmailsBackends
-  autoload :ActionMailer,     "checker_jobs/emails_backends/action_mailer"
-  autoload :DefaultFormatter, "checker_jobs/emails_backends/default_formatter"
+module CheckerJobs::Notifiers
+  autoload :Email,                  "checker_jobs/notifiers/email"
+  autoload :EmailDefaultFormatter,  "checker_jobs/notifiers/email_default_formatter"
+  autoload :Logger,                 "checker_jobs/notifiers/logger"
 end
