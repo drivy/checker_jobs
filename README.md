@@ -41,7 +41,7 @@ class UsersChecker
 
   options sidekiq: { queue: :slow }
 
-  notify "oss@drivy.com"
+  notify :email, to: "oss@drivy.com"
 
   ensure_no :negative_rental_credit do
     # The following code is an over-simplification
@@ -85,10 +85,11 @@ CheckerJobs.configure do |c|
   c.jobs_processor = :sidekiq
 
   c.notifier :email do |options|
-    options[:email_options] = {
-      from: "oss@drivy.com", reply_to: "no-reply@drivy.com"
-    }
     options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+    options[:email_options] = {
+      from: "oss@drivy.com",
+      reply_to: "no-reply@drivy.com",
+    }
   end
 
   c.notifier :logger do |options|
@@ -134,7 +135,7 @@ class UserChecker
 
   options sidekiq: { queue: :fast }
 
-  notify "tech@drivy.com"
+  notify :email, to: "oss@drivy.com"
 
   ensure_no :user_without_email do
     UserRepository.missing_email.size
@@ -146,7 +147,7 @@ The `UserChecker` will have the same interface as your usual jobs. In this
 example, `UserChecker` will be a `Sidekiq::Worker`. Its `#perform` method will
 run the check named `:user_without_email` and if
 `UserRepository.missing_email.size` is greater than 0 then an email will be
-fired through ActionMailer to `tech@drivy.com`.
+fired through ActionMailer to `oss@drivy.com`.
 
 ### Schedule checks
 

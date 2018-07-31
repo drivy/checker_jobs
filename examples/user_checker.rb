@@ -22,10 +22,11 @@ CheckerJobs.configure do |config|
   config.jobs_processor = :sidekiq
 
   config.notifier :email do |options|
-    options[:email_options] = {
-      from: "oss@drivy.com", reply_to: "no-reply@drivy.com"
-    }
     options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+    options[:email_options] = {
+      from: "oss@drivy.com",
+      reply_to: "no-reply@drivy.com",
+    }
   end
 
   config.around_check = -> {
