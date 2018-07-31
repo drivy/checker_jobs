@@ -1,3 +1,3 @@
 module CheckerJobs
-  VERSION = "0.1.2.pre".freeze
+  VERSION = "1.0.0".freeze
 end

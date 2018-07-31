@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Drivy", "Nicolas Zermati"]
   spec.email         = ["oss@drivy.com"]
 
-  spec.summary       = "Asynchronous data consistency checks"
+  spec.summary       = "Regression tests for data"
   spec.description   = ""
   spec.homepage      = "https://github.com/drivy/checker_jobs"
   spec.license       = "MIT"
