@@ -1,4 +1,6 @@
 class CheckerJobs::Notifiers::EmailDefaultFormatter
+  include CheckerJobs::Notifiers::FormatterHelpers
+
   def initialize(check, count, entries)
     @check = check
     @count = count
@@ -6,8 +8,7 @@ class CheckerJobs::Notifiers::EmailDefaultFormatter
   end
 
   def subject
-    name = @check.name.tr("_", " ").capitalize
-    "#{name} checker found #{@count} element(s)"
+    "#{human_check_name} checker found #{@count} element(s)"
   end
 
   def body
@@ -23,32 +24,8 @@ class CheckerJobs::Notifiers::EmailDefaultFormatter
 
   private
 
-  GITHUB_URL_FORMAT = "https://github.com/%<repository>s/blob/master/%<path>s#L%<line>i".freeze
-
-  def repository_url
-    if repository_configuration.is_a?(String)
-      repository_configuration
-    elsif repository_configuration.key?(:github)
-      github_url
-    end
-  end
-
-  def github_url
-    filepath, line_number = @check.block.source_location
-    filepath = filepath.sub(Dir.pwd + "/", "")
-    GITHUB_URL_FORMAT % {
-      repository: repository_configuration[:github],
-      path: filepath,
-      line: line_number,
-    }
-  end
-
   def format_entry(entry)
     # NOTE: inherit and override to support your custom objects
     entry.respond_to?(:id) ? entry.id : entry
-  end
-
-  def repository_configuration
-    CheckerJobs.configuration.repository_url
   end
 end

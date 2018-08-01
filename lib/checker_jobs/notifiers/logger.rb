@@ -1,6 +1,8 @@
 require "logger"
 
 class CheckerJobs::Notifiers::Logger
+  include CheckerJobs::Notifiers::FormatterHelpers
+
   DEFAULT_LEVEL = Logger::INFO
   DEFAULT_LOGDEV = STDOUT
 
@@ -15,7 +17,7 @@ class CheckerJobs::Notifiers::Logger
   end
 
   def notify
-    @logger.add(level, format, @check.name.tr("_", " ").capitalize)
+    @logger.add(level, format, human_check_name)
   end
 
   # override this

@@ -1,12 +1,13 @@
-require "checker_jobs/emails_backends"
+require "checker_jobs/notifiers"
 require "checker_jobs/jobs_processors"
 
 class CheckerJobs::Configuration
   DEFAULT_TIME_BETWEEN_CHECKS = 15 * 60 # 15 minutes, expressed in seconds
 
   NOTIFIER_CLASSES = {
-    email:          "CheckerJobs::Notifiers::Email",
-    logger:         "CheckerJobs::Notifiers::Logger",
+    email: "CheckerJobs::Notifiers::Email",
+    logger: "CheckerJobs::Notifiers::Logger",
+    bugsnag: "CheckerJobs::Notifiers::Bugsnag",
   }.freeze
 
   attr_accessor :jobs_processor,

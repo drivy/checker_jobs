@@ -2,6 +2,7 @@ require "simplecov"
 SimpleCov.start
 
 require "action_mailer"
+require "bugsnag"
 require "checker_jobs"
 require "pry-byebug"
 require "sidekiq"
