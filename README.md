@@ -119,6 +119,7 @@ PRs are appreciated 🙏
 
 We support different kind of notifiers, as of today we have the following:
 
+- `:bugsnag`: uses `Bugsnag` to send notifications. It takes the global configuration.
 - `:email`: uses `ActionMailer` to send emails. You can pass it any `ActionMailer` options.
 - `:logger`: Uses `Logger` to output inconsitencies in the log. Takes the following params:
   - `logdev`: The log device. This is a filename (String) or IO object (typically STDOUT, STDERR, or an open file).
