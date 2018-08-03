@@ -45,10 +45,18 @@ RSpec.describe CheckerJobs::Notifiers::Bugsnag, :configuration do
     describe "the second argument" do
       subject(:second_argument) { notify_arguments.second }
 
-      it "is an Error and have an explicit message" do
-        expect(second_argument).to eq({
+      it "is an Error and have an explicit message" do # rubocop:disable RSpec/ExampleLength
+        expect(second_argument).to match({
           severity: "warning",
-          triggered_check: { klass: checker_klass, name: instance.name, count: 5, entries: nil },
+          context: "checker_jobs",
+          grouping_hash: notify_arguments.first.message,
+          triggered_check: {
+            klass: checker_klass,
+            name: instance.name,
+            count: 5,
+            entries: nil,
+            source_code_url: kind_of(String),
+          },
         })
       end
     end

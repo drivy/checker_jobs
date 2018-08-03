@@ -6,10 +6,9 @@ class CheckerJobs::Notifiers::Logger
   DEFAULT_LEVEL = Logger::INFO
   DEFAULT_LOGDEV = STDOUT
 
-  def initialize(check, count, entries)
+  def initialize(check, count, _entries)
     @check = check
     @count = count
-    @entries = entries
     raise CheckerJobs::InvalidNotifierOptions unless valid?
 
     @logger = Logger.new(logdev)

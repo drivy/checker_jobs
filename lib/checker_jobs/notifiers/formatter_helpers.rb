@@ -1,8 +1,13 @@
 # Needs a @check instance variable and provides the methods:
 # - #repository_url
 # - #human_check_name
+# - #format_entry (a generic one)
 module CheckerJobs::Notifiers::FormatterHelpers
   GITHUB_URL_FORMAT = "https://github.com/%<repository>s/blob/master/%<path>s#L%<line>i".freeze
+
+  def format_entry(entry)
+    entry.respond_to?(:id) ? entry.id : entry.to_s
+  end
 
   def human_check_name
     @check.name.tr("_", " ").capitalize

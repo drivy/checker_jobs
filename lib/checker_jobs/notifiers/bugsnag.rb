@@ -11,7 +11,8 @@ class CheckerJobs::Notifiers::Bugsnag
       klass: @check.klass,
       name: @check.name,
       count: count,
-      entries: entries,
+      entries: entries&.map { |entry| format_entry(entry) },
+      source_code_url: repository_url,
     }
   end
 
@@ -20,6 +21,8 @@ class CheckerJobs::Notifiers::Bugsnag
   rescue Error => error
     ::Bugsnag.notify(error, {
       severity: "warning",
+      context: "checker_jobs",
+      grouping_hash: error.message,
       triggered_check: @metadata,
     })
   end

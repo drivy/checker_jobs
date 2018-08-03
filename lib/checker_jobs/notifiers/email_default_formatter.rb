@@ -26,6 +26,6 @@ class CheckerJobs::Notifiers::EmailDefaultFormatter
 
   def format_entry(entry)
     # NOTE: inherit and override to support your custom objects
-    entry.respond_to?(:id) ? entry.id : entry
+    super
   end
 end
