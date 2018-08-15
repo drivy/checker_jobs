@@ -90,9 +90,9 @@ GEM
     octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     parallel (1.12.1)
-    parser (2.5.0.5)
+    parser (2.5.1.2)
       ast (~> 2.4.0)
-    powerpack (0.1.1)
+    powerpack (0.1.2)
     pronto (0.9.5)
       gitlab (~> 4.0, >= 4.0.0)
       httparty (>= 0.13.7)
@@ -144,9 +144,9 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    rubocop-rspec (1.22.1)
-      rubocop (>= 0.52.1)
-    ruby-progressbar (1.9.0)
+    rubocop-rspec (1.26.0)
+      rubocop (>= 0.53.0)
+    ruby-progressbar (1.10.0)
     rugged (0.26.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
@@ -184,7 +184,7 @@ GEM
     tilt (2.0.8)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
-    unicode-display_width (1.3.0)
+    unicode-display_width (1.4.0)
 
 PLATFORMS
   ruby
