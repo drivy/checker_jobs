@@ -123,7 +123,7 @@ GEM
       loofah (~> 2.2, >= 2.2.2)
     rainbow (2.2.2)
       rake
-    rake (10.5.0)
+    rake (12.3.1)
     redis (4.0.2)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
@@ -199,7 +199,7 @@ DEPENDENCIES
   pronto
   pronto-rubocop
   pry-byebug
-  rake (~> 10.0)
+  rake (~> 12.3)
   rspec (~> 3.7)
   rubocop
   rubocop-rspec
