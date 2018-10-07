@@ -16,7 +16,7 @@ RSpec.describe CheckerJobs::Checks::Base, :configuration do
     end
 
     it "executes the block in the context of a new klass's instance" do
-      is_expected.to eq 13 # "oss@drivy.com".size
+      expect(perform).to eq 13 # "oss@drivy.com".size
     end
 
     context "when there is an around_check" do
@@ -33,7 +33,7 @@ RSpec.describe CheckerJobs::Checks::Base, :configuration do
       end
 
       it "delegates the execution of the block to the around_check" do
-        is_expected.to be 0
+        expect(perform).to be 0
       end
 
       it "keeps handling the result outside the around_check delegation" do

@@ -1,13 +1,11 @@
 require "logger"
 
-class CheckerJobs::Notifiers::Logger
+class CheckerJobs::Notifiers::Logger < CheckerJobs::Notifiers::Base
   include CheckerJobs::Notifiers::FormatterHelpers
 
-  DEFAULT_LEVEL = Logger::INFO
-  DEFAULT_LOGDEV = STDOUT
-
   def initialize(check, count, _entries)
-    @check = check
+    super
+
     @count = count
     raise CheckerJobs::InvalidNotifierOptions unless valid?
 
@@ -19,12 +17,19 @@ class CheckerJobs::Notifiers::Logger
     @logger.add(level, format, human_check_name)
   end
 
+  def self.default_options
+    {
+      logdev: STDOUT,
+      level: Logger::INFO,
+    }
+  end
+
+  private
+
   # override this
   def format
     "found #{@count} entries"
   end
-
-  private
 
   def valid?
     (logdev.is_a?(String) || logdev.is_a?(IO)) &&
@@ -35,18 +40,10 @@ class CheckerJobs::Notifiers::Logger
   end
 
   def level
-    @level ||=  @check.klass.notifier_options[:level] ||
-                notifier_options[:level] ||
-                DEFAULT_LEVEL
+    @level ||= @check.klass.notifier_options[:level] || notifier_options[:level]
   end
 
   def logdev
-    @logdev ||= @check.klass.notifier_options[:logdev] ||
-                notifier_options[:logdev] ||
-                DEFAULT_LOGDEV
-  end
-
-  def notifier_options
-    CheckerJobs.configuration.notifiers_options[@check.klass.notifier]
+    @logdev ||= @check.klass.notifier_options[:logdev] || notifier_options[:logdev]
   end
 end

@@ -21,6 +21,10 @@ CheckerJobs.configure do |config|
 
   config.jobs_processor = :sidekiq
 
+  config.notifier :bugsnag do |options|
+    options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
+  end
+
   config.notifier :email do |options|
     options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
     options[:email_options] = {

@@ -25,8 +25,8 @@ class CheckerJobs::Configuration
   end
 
   def notifier(notifier_symbol)
-    options = {}
-    yield(options)
+    options = default_options_for(notifier_symbol)
+    yield options
     @notifiers_options[notifier_symbol] = options
   end
 
@@ -44,5 +44,12 @@ class CheckerJobs::Configuration
       raise CheckerJobs::UnsupportedConfigurationOption.new(:notifier, notifier)
     end
     Object.const_get(notifier_class_name)
+  end
+
+  private
+
+  def default_options_for(notifier_symbol)
+    klass = notifier_class(notifier_symbol)
+    klass.respond_to?(:default_options) ? klass.default_options : {}
   end
 end

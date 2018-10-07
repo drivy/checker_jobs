@@ -15,50 +15,49 @@ RSpec.describe CheckerJobs::Notifiers::Bugsnag, :configuration do
   end
 
   it "notifies bugsnag" do
-    allow(::Bugsnag).to receive(:notify)
+    allow(::Bugsnag::Notification).to receive(:deliver_exception_payload)
     perform
-    expect(::Bugsnag).to have_received(:notify).once
+    expect(::Bugsnag::Notification).to have_received(:deliver_exception_payload).once
   end
 
-  describe "notify's arguments" do
-    subject(:notify_arguments) do
-      [].tap do |captured_args|
-        allow(::Bugsnag).to receive(:notify).and_wrap_original do |_method, *args|
-          captured_args.concat(args)
+  describe "notify's resulting payload" do
+    subject(:notify_payload) do
+      payload = nil
+
+      # NOTE: To get compatibility with Bugsnag 6, we'll get the payload from elsewhere:
+      # Bugsnag::Delivery[configuration.delivery_method].deliver(_, payload, _, _)
+      allow(::Bugsnag::Notification).
+        to receive(:deliver_exception_payload).
+        and_wrap_original do |_method, _, p, _, _|
+          payload = p[:events].first
         end
 
-        perform
-      end
+      perform
+
+      payload
     end
 
-    describe "the first argument" do
-      subject(:first_argument) { notify_arguments.first }
-
-      it "is an Error and have an explicit message" do
-        expect(first_argument).to have_attributes(
-          class: described_class::Error,
-          message: "(#{checker_klass}) Ensure name was triggered!"
-        )
-      end
+    # rubocop:disable RSpec/ExampleLength
+    it "is an Error and have an explicit message", aggregate_failures: true do
+      # We hook deep into Bugsnag to ensure we send the right payload.
+      # This ensure we're only compatible with Bugsnag 5 and not Bugsnag 6.
+      expect(notify_payload[:context]).to eq "checker_jobs"
+      expect(notify_payload[:severity]).to eq "warning"
+      expect(notify_payload[:groupingHash]).to eq "(#{checker_klass}) Ensure name was triggered!"
+      expect(notify_payload[:exceptions].first).to match a_hash_including({
+        errorClass: described_class::Error.to_s,
+        message: "(#{checker_klass}) Ensure name was triggered!",
+      })
+      expect(notify_payload[:metaData]).to match({
+        triggered_check: {
+          klass: kind_of(String),
+          name: instance.name,
+          count: 5,
+          entries: nil,
+          source_code_url: kind_of(String),
+        },
+      })
     end
-
-    describe "the second argument" do
-      subject(:second_argument) { notify_arguments.second }
-
-      it "is an Error and have an explicit message" do # rubocop:disable RSpec/ExampleLength
-        expect(second_argument).to match({
-          severity: "warning",
-          context: "checker_jobs",
-          grouping_hash: notify_arguments.first.message,
-          triggered_check: {
-            klass: checker_klass,
-            name: instance.name,
-            count: 5,
-            entries: nil,
-            source_code_url: kind_of(String),
-          },
-        })
-      end
-    end
+    # rubocop:enable RSpec/ExampleLength
   end
 end

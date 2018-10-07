@@ -9,10 +9,16 @@ require "sidekiq"
 require "sidekiq/testing"
 
 ActionMailer::Base.delivery_method = :test
+
 Sidekiq::Testing.inline!
 
-# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-RSpec.configure do |config|
+Bugsnag.configure do |config|
+  # This API key is completely fake, it shouldn't be used.
+  config.api_key = "11111111111111111111111111111111"
+  config.release_stage = "production"
+end
+
+RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end

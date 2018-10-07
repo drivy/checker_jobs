@@ -43,11 +43,13 @@ module CheckerJobs::DSL
 
   def notifier
     raise CheckerJobs::MissingNotifier, self.class unless defined?(@notifier)
+
     @notifier
   end
 
   def notifier_options
     raise CheckerJobs::MissingNotifier, self.class unless defined?(@notifier)
+
     @notifier_options
   end
 
@@ -60,7 +62,7 @@ module CheckerJobs::DSL
   end
 
   def checks
-    @check ||= {}
+    @checks ||= {}
   end
 
   def add_check(klass, name, options, block)
