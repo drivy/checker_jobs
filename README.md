@@ -84,6 +84,10 @@ require "checker_jobs"
 CheckerJobs.configure do |c|
   c.jobs_processor = :sidekiq
 
+  c.notifier :bugsnag do |options|
+    options[:formatter_class] = CheckerJobs::Notifiers::BugsnagDefaultFormatter
+  end
+
   c.notifier :email do |options|
     options[:formatter_class] = CheckerJobs::Notifiers::EmailDefaultFormatter
     options[:email_options] = {
@@ -119,7 +123,7 @@ PRs are appreciated 🙏
 
 We support different kind of notifiers, as of today we have the following:
 
-- `:bugsnag`: uses `Bugsnag` to send notifications. It takes the global configuration.
+- `:bugsnag`: uses `Bugsnag` to send notifications. It takes the global Bugsnag configuration.
 - `:email`: uses `ActionMailer` to send emails. You can pass it any `ActionMailer` options.
 - `:logger`: Uses `Logger` to output inconsitencies in the log. Takes the following params:
   - `logdev`: The log device. This is a filename (String) or IO object (typically STDOUT, STDERR, or an open file).

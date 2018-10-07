@@ -1,8 +1,9 @@
 require "action_mailer"
 
-class CheckerJobs::Notifiers::Email
+class CheckerJobs::Notifiers::Email < CheckerJobs::Notifiers::Base
   def initialize(check, count, entries)
-    @check = check
+    super
+
     @formatter = formatter_class.new(check, count, entries)
     @defaults = { subject: @formatter.subject }
 
@@ -10,27 +11,34 @@ class CheckerJobs::Notifiers::Email
   end
 
   def notify
-    Mailer.notify(@formatter.body, options).deliver!
+    Mailer.notify(@formatter.body, mailer_options).deliver!
+  end
+
+  def self.default_options
+    {
+      formatter_class: CheckerJobs::Notifiers::EmailDefaultFormatter,
+      email_options: {},
+    }
   end
 
   private
 
   def valid?
-    options[:to].is_a?(String)
+    mailer_options[:to].is_a?(String)
   end
 
-  def options
-    @options ||=  @defaults.
-                  merge(notifier_options[:email_options]).
-                  merge(@check.klass.notifier_options)
+  def mailer_options
+    @mailer_options ||= @defaults.
+                        merge(email_options).
+                        merge(@check.klass.notifier_options)
+  end
+
+  def email_options
+    notifier_options[:email_options]
   end
 
   def formatter_class
-    notifier_options[:formatter_class] || CheckerJobs::Notifiers::EmailDefaultFormatter
-  end
-
-  def notifier_options
-    CheckerJobs.configuration.notifiers_options[@check.klass.notifier]
+    notifier_options[:formatter_class]
   end
 
   # Simple mailer class based on ActionMailer to send HTML emails while reusing

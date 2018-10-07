@@ -33,6 +33,9 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
 #
 # Disabled cops
 #

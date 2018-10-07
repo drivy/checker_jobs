@@ -1,8 +1,8 @@
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "checker_jobs/version"
 
-Gem::Specification.new do |spec|
+Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.name          = "checker_jobs"
   spec.version       = CheckerJobs::VERSION
   spec.authors       = ["Drivy", "Nicolas Zermati"]

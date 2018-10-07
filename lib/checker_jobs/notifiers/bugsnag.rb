@@ -1,29 +1,30 @@
-require "action_mailer"
-
-class CheckerJobs::Notifiers::Bugsnag
-  include CheckerJobs::Notifiers::FormatterHelpers
-
+class CheckerJobs::Notifiers::Bugsnag < CheckerJobs::Notifiers::Base
   class Error < StandardError; end
 
   def initialize(check, count, entries)
-    @check = check
-    @metadata = {
-      klass: @check.klass,
-      name: @check.name,
-      count: count,
-      entries: entries&.map { |entry| format_entry(entry) },
-      source_code_url: repository_url,
-    }
+    super
+
+    @formatter = formatter_class.new(check, count, entries)
   end
 
   def notify
-    raise Error, "(#{@check.klass}) #{human_check_name} was triggered!"
+    raise @formatter.base_error
   rescue Error => error
-    ::Bugsnag.notify(error, {
-      severity: "warning",
-      context: "checker_jobs",
-      grouping_hash: error.message,
-      triggered_check: @metadata,
-    })
+    ::Bugsnag.notify(error) do |notification|
+      notification.severity = @formatter.severity
+      notification.context = @formatter.context
+      notification.grouping_hash = @formatter.grouping_hash
+      notification.add_tab(*@formatter.tab_infos)
+    end
+  end
+
+  def self.default_options
+    { formatter_class: CheckerJobs::Notifiers::BugsnagDefaultFormatter }
+  end
+
+  private
+
+  def formatter_class
+    notifier_options.fetch(:formatter_class)
   end
 end
