@@ -159,7 +159,7 @@ fired through ActionMailer to `oss@drivy.com`.
 Once you have checker jobs, you'll need to run them. There are many task
 schedulers out there and it isn't really relevant what you'll be using.
 
-You have to enqueue you job as often as you like and that's it.
+You have to enqueue your job as often as you like and that's it.
 
 ``` ruby
 UserChecker.perform_async
