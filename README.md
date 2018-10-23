@@ -174,3 +174,7 @@ You'll find out that the CI is setup to run test coverage and linting.
 ## License
 
 The gem is available as open source under the terms of the [MIT License][licence].
+
+[licence]: https://github.com/drivy/checker_jobs/blob/master/LICENSE.txt
+[d-jobs]: https://drivy.engineering/jobs/
+[gh-sidekiq]: https://github.com/mperham/sidekiq
