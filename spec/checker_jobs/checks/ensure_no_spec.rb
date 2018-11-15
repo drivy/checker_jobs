@@ -37,5 +37,17 @@ RSpec.describe CheckerJobs::Checks::EnsureNo, :email, :configuration do
 
       it { sends_an_email }
     end
+
+    context "when block's result is true" do
+      let(:block) { Proc.new { true } }
+
+      it { sends_an_email }
+    end
+
+    context "when block's result is false" do
+      let(:block) { Proc.new { false } }
+
+      it { doesn_t_send_any_email }
+    end
   end
 end
