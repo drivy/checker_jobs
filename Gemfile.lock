@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    checker_jobs (1.1.1)
+    checker_jobs (1.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -207,4 +207,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   1.16.1
+   1.17.0
