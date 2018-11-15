@@ -23,7 +23,7 @@ you like and then those checks are run by your application, in background jobs.
 
 A small DSL is provided to helps you express your predicates:
 
-- `ensure_no` will check that the result of a given block is `zero?` or `empty?`
+- `ensure_no` will check that the result of a given block is `zero?`, `empty?` or `false`
 - `ensure_more` will check that the result of a given block is `>=` than a given number
 - `ensure_fewer` will check that the result of a given block is `<=` than a given number
 
