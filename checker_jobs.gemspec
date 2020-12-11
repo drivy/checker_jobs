@@ -22,7 +22,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
 
   spec.add_development_dependency "actionmailer", "~> 5.0"
   spec.add_development_dependency "bugsnag"
-  spec.add_development_dependency "bundler", "~> 1.13"
+  spec.add_development_dependency "bundler", "~> 2.2"
   spec.add_development_dependency "mailcatcher"
   spec.add_development_dependency "pronto"
   spec.add_development_dependency "pronto-rubocop"
