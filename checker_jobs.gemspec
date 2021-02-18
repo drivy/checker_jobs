@@ -20,7 +20,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "actionmailer", "~> 5.0"
+  spec.add_development_dependency "actionmailer", "~> 6.1"
   spec.add_development_dependency "bugsnag"
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "mailcatcher"
