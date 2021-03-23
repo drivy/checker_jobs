@@ -1,48 +1,62 @@
 version: 2
 jobs:
-  build:
+  test-ruby:
     docker:
-      - image: drivy/rails-ci:0.1.2
+      - image: cimg/ruby:2.6.6
     steps:
       - checkout
-
-      - run: git fetch origin --depth=1000
-
-      # Install CodeClimate test reporter binary, rebuild without cache to update the binary
-      - restore_cache:
-          key: cc_test_reporter
       - run:
-          name: Install Code Climate test reporter
+          name: Install CMake, pkg-config and system dependencies
+          command: sudo apt update && sudo apt install cmake pkg-config libsqlite3-dev
+      - run:
+          name: Install Bundler
           command: |
-            [ -f bin/cc-test-reporter ] || curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./bin/cc-test-reporter
-            chmod +x bin/cc-test-reporter
-      - restore_cache:
-          key: cc_test_reporter
-          paths:
-            - bin/cc-test-reporter
-
+            sudo gem update --system
+            gem install bundler --no-document
       - run:
-          name: "Creating a Gemfile.lock without bundler's version"
-          command: "head -n -3 Gemfile.lock > Gemfile.lock.no-version"
-
-      # Bundle install with cache, Ignore bundler version
-      - restore_cache:
-          key: checker_jobs-{{ checksum "Gemfile.lock.no-version"}}
-      - run:
-          name: Install Ruby dependencies
-          command: bundle install --path vendor/bundle --jobs=`nproc`
-      - save_cache:
-          key: checker_jobs-{{ checksum "Gemfile.lock.no-version"}}
-          paths:
-            - vendor/bundle
-
-      - run:
-          name: RSpec
+          name: Install dependencies (bundler)
           command: |
-            ./bin/cc-test-reporter before-build
-            bundle exec rspec --format documentation
-            ./bin/cc-test-reporter after-build --exit-code $?
-
+            bundle config set frozen 'true'
+            bundle config set path 'vendor/bundle'
+            bundle install --jobs=4
       - run:
-          name: Pronto
-          command: bin/pronto-ci
+          name: Install linting dependencies (Bundler)
+          command: |
+            bundle config set frozen 'true'
+            bundle config set path 'vendor/bundle'
+            bundle install --jobs=4
+      - run:
+          name: Lint Ruby sources (RSpec)
+          command: bundle exec rspec
+
+  lint-ruby:
+    docker:
+      - image: cimg/ruby:2.6.6
+    steps:
+      - checkout
+      - run:
+          name: Install CMake, pkg-config and system dependencies
+          command: sudo apt update && sudo apt install cmake pkg-config libsqlite3-dev
+      - run:
+          name: Install Bundler
+          command: |
+            sudo gem update --system
+            gem install bundler --no-document
+      - run:
+          name: Install dependencies (bundler)
+          command: |
+            bundle config set frozen 'true'
+            bundle config set path 'vendor/bundle'
+            bundle install --jobs=4
+      - run:
+          name: Lint Ruby sources (Rubocop)
+          command: bundle exec rubocop
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - test-ruby:
+          context: default
+      - lint-ruby:
+          context: default
