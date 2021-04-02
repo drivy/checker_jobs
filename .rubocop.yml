@@ -4,6 +4,7 @@ AllCops:
   TargetRubyVersion: 2.3
   Exclude:
     - "examples/*.rb"
+    - vendor/**/*
 
 #
 # Opinionated cops
@@ -12,7 +13,7 @@ AllCops:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
 Metrics/AbcSize:

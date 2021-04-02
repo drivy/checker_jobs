@@ -1,7 +1,7 @@
 class CheckerJobs::Checks::EnsureNo < CheckerJobs::Checks::Base
   private
 
-  def handle_result(result)
+  def handle_result(result) # rubocop:disable Metrics/CyclomaticComplexity
     case result
     when Numeric
       notify(count: result) unless result.zero?

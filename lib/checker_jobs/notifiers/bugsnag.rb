@@ -9,8 +9,8 @@ class CheckerJobs::Notifiers::Bugsnag < CheckerJobs::Notifiers::Base
 
   def notify
     raise @formatter.base_error
-  rescue Error => error
-    ::Bugsnag.notify(error) do |notification|
+  rescue Error => e
+    ::Bugsnag.notify(e) do |notification|
       notification.severity = @formatter.severity
       notification.context = @formatter.context
       notification.grouping_hash = @formatter.grouping_hash
