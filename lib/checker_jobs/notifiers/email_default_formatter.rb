@@ -24,7 +24,7 @@ class CheckerJobs::Notifiers::EmailDefaultFormatter
 
   private
 
-  def format_entry(entry)
+  def format_entry(entry) # rubocop:disable Lint/UselessMethodDefinition
     # NOTE: inherit and override to support your custom objects
     super
   end

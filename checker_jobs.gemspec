@@ -19,6 +19,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = ">= 2.6.0"
 
   spec.add_development_dependency "actionmailer", ">= 5.0", "< 7.0"
   spec.add_development_dependency "bugsnag"

@@ -24,9 +24,7 @@ RSpec.describe CheckerJobs::Notifiers::Bugsnag, :configuration do
     subject(:notify_report) do
       report = nil
 
-      allow(::Bugsnag).
-        to receive(:deliver_notification).
-        and_wrap_original { |_, r| report = r }
+      allow(::Bugsnag).to(receive(:deliver_notification).and_wrap_original { |_, r| report = r })
 
       perform
 

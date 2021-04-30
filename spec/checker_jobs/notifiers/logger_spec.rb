@@ -24,7 +24,7 @@ RSpec.describe CheckerJobs::Notifiers::Logger, :configuration do
     let(:checker_klass) do
       Class.new do
         include CheckerJobs::Base
-        notify :logger, level: Logger::FATAL, logdev: STDERR
+        notify :logger, level: Logger::FATAL, logdev: $stderr
       end
     end
 

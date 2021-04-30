@@ -14,9 +14,9 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
   end
 
   describe "#perform(check_name)" do
-    include_context "when SidekiqChecker is available"
-
     subject(:perform_with_arg) { sidekiq_checker.perform("check_name") }
+
+    include_context "when SidekiqChecker is available"
 
     before { allow(sidekiq_checker_klass).to receive(:perform_check).and_call_original }
 
@@ -35,9 +35,9 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
   end
 
   describe "#perform()" do
-    include_context "when SidekiqChecker is available"
-
     subject(:perform) { sidekiq_checker.perform }
+
+    include_context "when SidekiqChecker is available"
 
     before { allow(sidekiq_checker_klass).to receive(:client_push).and_call_original }
 
