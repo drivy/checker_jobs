@@ -33,8 +33,6 @@ RSpec.describe CheckerJobs::Notifiers::Bugsnag, :configuration do
 
     # rubocop:disable RSpec/ExampleLength
     it "is an Error and have an explicit message", aggregate_failures: true do
-      # We hook deep into Bugsnag to ensure we send the right payload.
-      # This ensure we're only compatible with Bugsnag 5 and not Bugsnag 6.
       expect(notify_report.context).to eq "checker_jobs"
       expect(notify_report.severity).to eq "warning"
       expect(notify_report.grouping_hash).to eq "(#{checker_klass}) Ensure name was triggered!"

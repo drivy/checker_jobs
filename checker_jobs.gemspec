@@ -32,6 +32,6 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.add_development_dependency "rspec", "~> 3.10"
   spec.add_development_dependency "rubocop"
   spec.add_development_dependency "rubocop-rspec"
-  spec.add_development_dependency "sidekiq", ">= 5.0", "< 7.0"
+  spec.add_development_dependency "sidekiq", ">= 6.0", "< 7.0"
   spec.add_development_dependency "simplecov"
 end
