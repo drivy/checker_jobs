@@ -14,9 +14,9 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
   end
 
   describe "#perform(check_name)" do
-    include_context "when SidekiqChecker is available"
-
     subject(:perform_with_arg) { sidekiq_checker.perform("check_name") }
+
+    include_context "when SidekiqChecker is available"
 
     before { allow(sidekiq_checker_klass).to receive(:perform_check).and_call_original }
 
@@ -35,9 +35,9 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
   end
 
   describe "#perform()" do
-    include_context "when SidekiqChecker is available"
-
     subject(:perform) { sidekiq_checker.perform }
+
+    include_context "when SidekiqChecker is available"
 
     before { allow(sidekiq_checker_klass).to receive(:client_push).and_call_original }
 
@@ -50,10 +50,10 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
       it "pushes a job per check to Sidekiq" do
         perform
 
-        first_item = { "class" => sidekiq_checker_klass.to_s, "args" => ["first_check"] }
+        first_item = { "class" => sidekiq_checker_klass, "args" => ["first_check"] }
         expect_in_sidekiq(a_hash_including(first_item))
 
-        second_item = { "class" => sidekiq_checker_klass.to_s, "args" => ["second_check"] }
+        second_item = { "class" => sidekiq_checker_klass, "args" => ["second_check"] }
         expect_in_sidekiq(a_hash_including(second_item))
       end
 
@@ -69,7 +69,7 @@ RSpec.describe CheckerJobs::JobsProcessors::Sidekiq, :configuration do
       it "adds the queue the the item pushed through Sidekiq" do
         perform
 
-        item = { "class" => sidekiq_checker_klass.to_s, "args" => ["check"], "queue" => q }
+        item = { "class" => sidekiq_checker_klass, "args" => ["check"], "queue" => q }
         expect_in_sidekiq(a_hash_including(item))
       end
     end

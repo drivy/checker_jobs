@@ -44,7 +44,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
       end
 
       c.notifier :logger do |options|
-        options[:logdev] = STDOUT
+        options[:logdev] = $stdout
         options[:level] = Logger::INFO
       end
 

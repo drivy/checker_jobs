@@ -1,7 +1,6 @@
 require: rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.3
   Exclude:
     - "examples/*.rb"
     - vendor/**/*
@@ -13,7 +12,7 @@ AllCops:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Metrics/AbcSize:
@@ -44,9 +43,6 @@ Style/TrailingCommaInArguments:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 Style/FormatString:
   Enabled: false
 
@@ -62,4 +58,7 @@ Metrics/BlockLength:
     - "spec/**/*_spec.rb"
 
 Style/Proc:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
   Enabled: false

@@ -25,7 +25,7 @@ module CheckerJobs::Notifiers::FormatterHelpers
 
   def github_url
     filepath, line_number = @check.block.source_location
-    filepath = filepath.sub(Dir.pwd + "/", "")
+    filepath = filepath.sub("#{Dir.pwd}/", "")
     GITHUB_URL_FORMAT % {
       repository: repository_configuration[:github],
       path: filepath,

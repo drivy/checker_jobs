@@ -19,7 +19,7 @@ class CheckerJobs::Notifiers::Logger < CheckerJobs::Notifiers::Base
 
   def self.default_options
     {
-      logdev: STDOUT,
+      logdev: $stdout,
       level: Logger::INFO,
     }
   end
